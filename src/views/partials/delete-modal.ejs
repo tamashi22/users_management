@@ -1,0 +1,45 @@
+<div id="deleteModal" class="modal">
+  <div class="modal-content">
+    <h3>Confirm Delete</h3>
+    <p>Are you sure you want to delete user <strong id="deleteUsername"></strong>?</p>
+    
+    <form id="deleteForm" method="POST" style="margin-top: 20px;">
+      <input type="hidden" name="_method" value="DELETE">
+      <input type="hidden" name="_csrf" id="deleteFormCsrf" value="<%= csrfToken %>">
+      <div class="form-actions">
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Attach event listeners to delete buttons
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.delete-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const userId = this.getAttribute('data-user-id');
+        const username = this.getAttribute('data-username');
+        openDeleteModal(userId, username);
+      });
+    });
+  });
+
+  function openDeleteModal(userId, username) {
+    document.getElementById('deleteUsername').textContent = username;
+    document.getElementById('deleteForm').action = '/users/' + userId + '?_method=DELETE';
+    document.getElementById('deleteModal').style.display = 'flex';
+  }
+
+  function closeDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById('deleteModal');
+    if (event.target === modal) {
+      closeDeleteModal();
+    }
+  }
+</script>

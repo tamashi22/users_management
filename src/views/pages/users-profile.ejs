@@ -1,0 +1,57 @@
+<%
+  const isOwnProfile = viewUser.id === user.id;
+  const pageTitle = isOwnProfile ? 'My Profile' : 'User Profile';
+%>
+<%- include('../layouts/head', { title: pageTitle }) %>
+<%- include('../partials/header', { pageTitle, user, showCreateButton: false }) %>
+
+<div class="card users-form">
+  <div class="card-body">
+    <h2><%= pageTitle %></h2>
+
+    <div class="profile-info">
+      <div class="profile-field">
+        <label>Username</label>
+        <p><%= viewUser.username %></p>
+      </div>
+
+      <div class="profile-field">
+        <label>First Name</label>
+        <p><%= viewUser.first_name %></p>
+      </div>
+
+      <div class="profile-field">
+        <label>Last Name</label>
+        <p><%= viewUser.last_name %></p>
+      </div>
+
+      <div class="profile-field">
+        <label>Gender</label>
+        <p><%= viewUser.gender %></p>
+      </div>
+
+      <div class="profile-field">
+        <label>Birth Date</label>
+        <p><%= viewUser.birth_date ? new Date(viewUser.birth_date).toLocaleDateString() : '-' %></p>
+      </div>
+
+      <div class="profile-field">
+        <label>Role</label>
+        <p><span class="badge badge-<%= viewUser.role %>"><%= viewUser.role %></span></p>
+      </div>
+
+      <div class="profile-field">
+        <label>Member Since</label>
+        <p><%= new Date(viewUser.createdAt).toLocaleDateString() %></p>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a href="/users/<%= viewUser.id %>/edit" class="btn btn-primary">Edit Profile</a>
+      <a href="/users" class="btn btn-secondary">Back to Users</a>
+    </div>
+  </div>
+</div>
+
+<%- include('../layouts/foot') %>
+

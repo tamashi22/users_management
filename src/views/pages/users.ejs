@@ -1,0 +1,58 @@
+<%- include('../layouts/head', { title: 'Users Management' }) %>
+<%- include('../partials/header', { pageTitle: 'Users Management', user }) %>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <%- include('../partials/sortable-th', { field: 'username', label: 'Username', sortBy, order, limit: pagination.limit }) %>
+        <%- include('../partials/sortable-th', { field: 'first_name', label: 'First Name', sortBy, order, limit: pagination.limit }) %>
+        <%- include('../partials/sortable-th', { field: 'last_name', label: 'Last Name', sortBy, order, limit: pagination.limit }) %>
+        <th>Gender</th>
+        <%- include('../partials/sortable-th', { field: 'birth_date', label: 'Birth Date', sortBy, order, limit: pagination.limit }) %>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(u => { %>
+      <tr>
+        <td><%= u.username %></td>
+        <td><%= u.first_name %></td>
+        <td><%= u.last_name %></td>
+        <td><%= u.gender %></td>
+        <td><%= u.birth_date ? new Date(u.birth_date).toLocaleDateString() : '-' %></td>
+        <td><span class="badge badge-<%= u.role %>"><%= u.role %></span></td>
+        <td class="flex-container">
+          <button onclick="window.location.href='/users/<%= u.id %>'" class="btn-icon btn-secondary" title="View profile">
+            <img src="/icons/userIcon.svg" alt="User" class="btn-icon-img">
+          </button>
+
+          <button onclick="window.location.href='/users/<%= u.id %>/edit'" class="btn-icon btn-primary" title="Edit user">
+            <img src="/icons/editIcon.svg" alt="Edit" width="16" height="16" class="btn-icon-img">
+          </button>
+
+          <% if (u.id !== user.id) { %>
+            <button class="btn-icon btn-danger delete-btn" data-user-id="<%= u.id %>" data-username="<%= u.username %>" title="Delete user">
+              <img src="/icons/deleteIcon.svg" alt="Delete" width="16" height="16" class="btn-icon-img">
+            </button>
+          <% } else { %>
+            <button class="btn-icon btn-secondary" disabled>
+              <img src="/icons/deleteIcon.svg" alt="Delete" width="16" height="16" class="btn-icon-img" style="opacity: 0.5;">
+            </button>
+          <% } %>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <div class="info">
+    Showing <%= (pagination.page - 1) * pagination.limit + 1 %> - <%= Math.min(pagination.page * pagination.limit, pagination.total) %> of <%= pagination.total %> users
+  </div>
+
+  <%- include('../partials/pagination', { pagination, sortBy, order }) %>
+</div>
+
+<%- include('../partials/delete-modal') %>
+<%- include('../layouts/foot') %>

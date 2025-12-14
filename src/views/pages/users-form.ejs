@@ -1,0 +1,108 @@
+<%
+  const isEdit = typeof editUser !== 'undefined' && editUser;
+  const pageTitle = isEdit ? 'Edit User' : 'Create User';
+  const userData = isEdit ? editUser : {};
+  const formAction = isEdit ? `/users/${editUser.id}?_method=PUT` : '/users';
+  const submitText = isEdit ? 'Update User' : 'Create User';
+%>
+<%- include('../layouts/head', { title: pageTitle }) %>
+<%- include('../partials/header', { pageTitle, user }) %>
+
+<div class="card users-form">
+  <div class="card-body">
+    <h2><%= pageTitle %></h2>
+
+    <form method="POST" action="<%= formAction %>">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" class="form-control" value="<%= userData.username || '' %>">
+        <% if (errors && errors.username) { %>
+          <p class="form-error"><%= errors.username %></p>
+        <% } %>
+      </div>
+
+      <% if (!isEdit) { %>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Enter password">
+        <% if (errors && errors.password) { %>
+          <p class="form-error"><%= errors.password %></p>
+        <% } %>
+      </div>
+      <% } %>
+
+      <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input type="text" id="first_name" name="first_name" class="form-control" value="<%= userData.first_name || '' %>">
+        <% if (errors && errors.first_name) { %>
+          <p class="form-error"><%= errors.first_name %></p>
+        <% } %>
+      </div>
+
+      <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input type="text" id="last_name" name="last_name" class="form-control" value="<%= userData.last_name || '' %>">
+        <% if (errors && errors.last_name) { %>
+          <p class="form-error"><%= errors.last_name %></p>
+        <% } %>
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender" class="form-control">
+          <option value="">Select gender</option>
+          <option value="male" <%= userData.gender === 'male' ? 'selected' : '' %>>Male</option>
+          <option value="female" <%= userData.gender === 'female' ? 'selected' : '' %>>Female</option>
+          <option value="other" <%= userData.gender === 'other' ? 'selected' : '' %>>Other</option>
+        </select>
+        <% if (errors && errors.gender) { %>
+          <p class="form-error"><%= errors.gender %></p>
+        <% } %>
+      </div>
+
+      <div class="form-group">
+        <label for="birth_date">Birth Date</label>
+        <input type="date" id="birth_date" name="birth_date" class="form-control" value="<%= userData.birth_date ? new Date(userData.birth_date).toISOString().split('T')[0] : '' %>">
+        <% if (errors && errors.birth_date) { %>
+          <p class="form-error text-danger"><%= errors.birth_date %></p>
+        <% } %>
+      </div>
+
+      <div class="form-group">
+        <label for="role">Role</label>
+        <select id="role" name="role" class="form-control">
+          <option value="">Select role</option>
+          <option value="user" <%= userData.role === 'user' ? 'selected' : '' %>>User</option>
+          <option value="admin" <%= userData.role === 'admin' ? 'selected' : '' %>>Admin</option>
+        </select>
+        <% if (errors && errors.role) { %>
+          <p class="form-error"><%= errors.role %></p>
+        <% } %>
+      </div>
+
+
+      <% if (isEdit && editUser.id === user.id) { %>
+        <div class="form-group">
+          <label for="newPassword">New Password (optional)</label>
+          <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="Leave empty to keep current password">
+          <% if (errors && errors.newPassword) { %>
+            <p class="form-error"><%= errors.newPassword %></p>
+          <% } %>
+        </div>
+        <% } %>
+  
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary"><%= submitText %></button>
+        <a href="/users" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+
+    <% if (error) { %>
+      <div class="alert alert-error" style="margin-top: 15px;"><%= error %></div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../layouts/foot') %>

@@ -1,0 +1,45 @@
+<%
+  const { pagination, sortBy, order } = locals;
+  const currentLimit = pagination.limit;
+  const limits = [10, 25, 50, 100];
+%>
+
+<div class="pagination-controls">
+  
+
+  <div class="pagination">
+    <% if (pagination.page > 1) { %>
+      <a href="?page=1&limit=<%= pagination.limit %>&sortBy=<%= sortBy %>&order=<%= order %>">First</a>
+      <a href="?page=<%= pagination.page - 1 %>&limit=<%= pagination.limit %>&sortBy=<%= sortBy %>&order=<%= order %>">Prev</a>
+    <% } else { %>
+      <span class="disabled">First</span>
+      <span class="disabled">Prev</span>
+    <% } %>
+
+    <% for (let i = Math.max(1, pagination.page - 2); i <= Math.min(pagination.totalPages, pagination.page + 2); i++) { %>
+      <% if (i === pagination.page) { %>
+        <span class="active"><%= i %></span>
+      <% } else { %>
+        <a href="?page=<%= i %>&limit=<%= pagination.limit %>&sortBy=<%= sortBy %>&order=<%= order %>"><%= i %></a>
+      <% } %>
+    <% } %>
+
+    <% if (pagination.page < pagination.totalPages) { %>
+      <a href="?page=<%= pagination.page + 1 %>&limit=<%= pagination.limit %>&sortBy=<%= sortBy %>&order=<%= order %>">Next</a>
+      <a href="?page=<%= pagination.totalPages %>&limit=<%= pagination.limit %>&sortBy=<%= sortBy %>&order=<%= order %>">Last</a>
+    <% } else { %>
+      <span class="disabled">Next</span>
+      <span class="disabled">Last</span>
+    <% } %>
+  </div>
+
+  <div class="pagination-select">
+    <label for="limit">Show:</label>
+    <select id="limit" onchange="window.location.href='?page=1&limit=' + this.value + '&sortBy=<%= sortBy %>&order=<%= order %>'">
+      <% limits.forEach(limit => { %>
+        <option value="<%= limit %>" <%= currentLimit == limit ? 'selected' : '' %>><%= limit %></option>
+      <% }) %>
+    </select>
+    <span>per page</span>
+  </div>
+</div>

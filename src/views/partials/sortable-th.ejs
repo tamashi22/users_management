@@ -1,0 +1,22 @@
+<%
+  const field = locals.field;
+  const label = locals.label;
+  const currentSort = locals.sortBy;
+  const currentOrder = locals.order;
+  const limit = locals.limit;
+
+  const isActive = currentSort === field;
+  const newOrder = isActive && currentOrder === 'ASC' ? 'DESC' : 'ASC';
+%>
+<th>
+  <a href="?sortBy=<%= field %>&order=<%= newOrder %>&page=1&limit=<%= limit %>">
+    <%= label %>
+    <% if (isActive) { %>
+        <% if (currentOrder === 'ASC') { %>
+          <img src="/icons/arrow-up.svg" alt="up" width="12" height="12">
+        <% } else { %>
+          <img src="/icons/arrow-down.svg" alt="down" width="12" height="12">
+        <% } %>
+    <% } %>
+  </a>
+</th>

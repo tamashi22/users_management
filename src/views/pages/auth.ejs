@@ -1,0 +1,36 @@
+<%- include('../layouts/head', { title: 'Login' }) %>
+
+<div class="center-container">
+  <div class="card center-box">
+    <div class="card-body">
+      <h1 class="text-center" style="margin-bottom: 20px;">Login</h1>
+
+      <form method="POST" action="/login">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" class="form-control" value="<%= username || '' %>" placeholder="Enter username">
+          <% if (errors && errors.username) { %>
+            <p class="form-error"><%= errors.username %></p>
+          <% } %>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Enter password">
+          <% if (errors && errors.password) { %>
+            <p class="form-error"><%= errors.password %></p>
+          <% } %>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+
+        <% if (error) { %>
+          <div class="alert alert-error" style="margin-top: 15px;"><%= error %></div>
+        <% } %>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../layouts/foot') %>
