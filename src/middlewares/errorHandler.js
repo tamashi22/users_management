@@ -13,7 +13,6 @@ const errorHandler = (err, req, res, next) => {
     if (isApiRequest) {
       // Return validation error for API
       return res.status(422).json({
-        success: false,
         message: err.message,
         errors: err.errors.map((e) => ({
           field: e.path,
