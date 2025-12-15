@@ -289,8 +289,8 @@ docker exec -i user_management_db psql -U root -d user_management_db < /backups/
 - **List Users**: Paginated table with sorting by username, first name, last name, birth date, or creation date
 - **View User**: Detailed user profile page
 - **Create User**: Form with validation for creating new users
-- **Edit User**: Edit user information (users can edit their own profile)
-- **Delete User**: Delete user accounts (prevents self-deletion)
+- **Edit User**: Edit user information
+- **Delete User**: Delete user accounts
 
 ### Data Validation
 
@@ -312,3 +312,8 @@ docker exec -i user_management_db psql -U root -d user_management_db < /backups/
 - `npm run dev` - Start the server in development mode with auto-reload (nodemon)
 - `npm run db:seed` - Manually seed the database with demo users
 - `npm run db:backup` - Create a database backup SQL dump
+
+## Test user
+
+- Login: `admin`
+- Password: `password123`
