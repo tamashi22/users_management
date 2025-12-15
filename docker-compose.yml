@@ -17,6 +17,30 @@ services:
     networks:
       - backend
 
+  # Node.js Application
+  app:
+    build: .
+    restart: always
+    container_name: user_management_app
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${PORT}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - JWT_SECRET=${JWT_SECRET}
+      - REFRESH_SECRET=${REFRESH_SECRET}
+    ports:
+      - "${PORT}:3000"
+    volumes:
+      - ./backups:/app/backups
+    depends_on:
+      - postgres
+    networks:
+      - backend
+
 volumes:
   user_management_db_data:
 
