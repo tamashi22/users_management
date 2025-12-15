@@ -11,6 +11,7 @@ const ALLOWED_SORT_FIELDS = [
 ];
 const ALLOWED_ORDER = ['ASC', 'DESC'];
 
+// Get all users
 const getAllUsers = async (options = {}) => {
   const {
     page = 1,
@@ -19,6 +20,7 @@ const getAllUsers = async (options = {}) => {
     order = 'DESC',
   } = options;
 
+  // Validate sort field
   const sortField = ALLOWED_SORT_FIELDS.includes(sortBy)
     ? sortBy
     : 'created_at';
@@ -26,8 +28,10 @@ const getAllUsers = async (options = {}) => {
     ? order.toUpperCase()
     : 'DESC';
 
+  // Calculate offset
   const offset = (page - 1) * limit;
 
+  // Find all users
   const { count, rows } = await User.findAndCountAll({
     attributes: { exclude: ['password'] },
     order: [[sortField, sortOrder]],
@@ -35,6 +39,7 @@ const getAllUsers = async (options = {}) => {
     offset,
   });
 
+  // Return users and pagination
   return {
     users: rows,
     pagination: {
@@ -46,6 +51,7 @@ const getAllUsers = async (options = {}) => {
   };
 };
 
+// Get user by id
 const getUserById = async (id) => {
   const user = await User.findByPk(id, {
     attributes: { exclude: ['password'] },
@@ -59,6 +65,7 @@ const getUserById = async (id) => {
 };
 
 const createUser = async (userData) => {
+  // Check if username is already taken
   const existingUser = await User.findOne({
     where: { username: userData.username },
   });
@@ -67,28 +74,33 @@ const createUser = async (userData) => {
     throw new Error('Username already exists');
   }
 
+  // Hash password
   const hashedPassword = await hashPassword(userData.password);
 
+  // Create user
   const user = await User.create({
     ...userData,
     password: hashedPassword,
     role: userData.role || ROLES.USER,
   });
 
+  // Return user response
   const userResponse = user.toJSON();
   delete userResponse.password;
 
   return userResponse;
 };
 
+// Update user
 const updateUser = async (id, userData) => {
+  // Check if user exists
   const user = await User.findByPk(id);
 
   if (!user) {
     throw new Error('User not found');
   }
 
-  // Check if username is taken by another user
+  // Check if username is already taken
   if (userData.username && userData.username !== user.username) {
     const existingUser = await User.findOne({
       where: { username: userData.username },
@@ -99,7 +111,7 @@ const updateUser = async (id, userData) => {
     }
   }
 
-  // Handle password update if newPassword is provided
+  // Hash password if newPassword is provided
   const updateData = { ...userData };
   if (updateData.newPassword) {
     updateData.password = await hashPassword(updateData.newPassword);
@@ -108,6 +120,7 @@ const updateUser = async (id, userData) => {
 
   await user.update(updateData);
 
+  // Return user response
   const userResponse = user.toJSON();
   delete userResponse.password;
 
@@ -115,18 +128,21 @@ const updateUser = async (id, userData) => {
 };
 
 const deleteUser = async (id, currentUserId) => {
+  // Check if user is trying to delete themselves
   if (Number(id) === Number(currentUserId)) {
     const error = new Error('You cannot delete yourself');
     error.statusCode = 403;
     throw error;
   }
 
+  // Check if user exists
   const user = await User.findByPk(id);
 
   if (!user) {
     throw new Error('User not found');
   }
 
+  // Delete user
   await user.destroy();
 
   return { message: 'User deleted successfully' };
