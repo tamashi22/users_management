@@ -228,6 +228,11 @@ http://localhost:3000
 
 You will be redirected to the login page at `/login`.
 
+## Test user
+
+- Login: `admin`
+- Password: `password123`
+
 ## Database Management
 
 ### Automatic Database Initialization
@@ -312,8 +317,3 @@ docker exec -i user_management_db psql -U root -d user_management_db < /backups/
 - `npm run dev` - Start the server in development mode with auto-reload (nodemon)
 - `npm run db:seed` - Manually seed the database with demo users
 - `npm run db:backup` - Create a database backup SQL dump
-
-## Test user
-
-- Login: `admin`
-- Password: `password123`
