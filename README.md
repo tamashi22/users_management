@@ -21,8 +21,8 @@ This is a secure user management web application that allows administrators to:
 - **View** a paginated and sortable list of all users
 - **Create** new user accounts with validation
 - **View** detailed user profile information
-- **Edit** existing user information (users can also edit their own profile)
-- **Delete** user accounts (with protection against self-deletion)
+- **Edit** existing user information
+- **Delete** user accounts
 - **Authenticate** using JWT-based authentication with access and refresh tokens
 - **Authorize** access control (admin-only routes)
 
